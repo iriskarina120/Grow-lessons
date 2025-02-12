@@ -1,0 +1,103 @@
+<!DOCTYPE html>  
+<html lang="en">  
+
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Interactive English Learning Games</title>  
+    <link rel="stylesheet" href="style/styles.css"> <!-- Link to your CSS file -->  
+</head>  
+
+<body>  
+
+    <header>  
+        <h1>Interactive Games for Learning English</h1>  
+    </header>  
+
+    <nav>  
+        <a href="#flashcards">Flashcards</a>  
+        <a href="#name-age">Name and Age</a>  
+        <a href="#color-game">Color Game</a>  
+        <a href="#verb-game">To Be Game</a>  
+    </nav>  
+
+    <!-- Greetings Flashcards -->  
+    <section class="section" id="flashcards">  
+        <h2>Greetings and Goodbyes Flashcards</h2>  
+        <div class="flashcards">  
+            <div class="card">  
+                <img src="images/placeholder.png" alt="Hello" />  
+                <p>Hello!</p>  
+                <button onclick="playSound('hello')">🔊</button>  
+            </div>  
+            <div class="card">  
+                <img src="images/placeholder.png" alt="Goodbye" />  
+                <p>Goodbye!</p>  
+                <button onclick="playSound('goodbye')">🔊</button>  
+            </div>  
+            <div class="card">  
+                <img src="images/placeholder.png" alt="Hi" />  
+                <p>Hi!</p>  
+                <button onclick="playSound('hi')">🔊</button>  
+            </div>  
+            <div class="card">  
+                <img src="images/placeholder.png" alt="See you later" />  
+                <p>See you later!</p>  
+                <button onclick="playSound('see_you_later')">🔊</button>  
+            </div>  
+        </div>  
+    </section>  
+
+    <!-- Name and Age Questions -->  
+    <section class="section" id="name-age">  
+        <h2>What is your Name?</h2>  
+        <label for="name">What is your name?</label>  
+        <input type="text" id="name" placeholder="Type your name" />  
+        <button onclick="greetUser()">Send</button>  
+        <p id="name-feedback"></p>  
+    </section>  
+
+    <!-- Color Guessing Game -->  
+    <section class="section" id="color-game">  
+        <h2>Guess the Color</h2>  
+        <div id="colorBox" style="background-color: gray;"></div>  
+        <button onclick="changeColor()">Change Color</button>  
+        <button onclick="guessColor('Red')">Red</button>  
+        <button onclick="guessColor('Blue')">Blue</button>  
+        <button onclick="guessColor('Green')">Green</button>  
+        <p id="color-feedback"></p>  
+        <p>Your score: <span id="color-score">0</span></p>  
+    </section>  
+
+    <!-- To Be Verb Game -->  
+    <section class="section" id="verb-game">  
+        <h2>Complete the Sentence with "to be"</h2>  
+        <p>I ___ a student.</p>  
+        <select id="verbSelect">  
+            <option value="am">am</option>  
+            <option value="is">is</option>  
+            <option value="are">are</option>  
+        </select>  
+        <button onclick="checkAnswer()">Submit</button>  
+        <p id="verb-feedback"></p>  
+        <p>Your score: <span id="verb-score">0</span></p>  
+    </section>       
+
+    <!-- Memory Game Section -->  
+    <section class="section" id="memory-game">  
+        <h2>Juego de Memoria</h2>  
+        <div id="memory-board" class="memory-board"></div>  
+        <p id="memory-feedback"></p>  
+    </section>  
+
+    <!-- Matching Game Section -->  
+    <section class="section" id="matching-game">  
+        <h2>Juego de Emparejamiento</h2>  
+        <div id="matching-board" class="matching-board"></div>  
+        <p id="matching-feedback"></p>  
+    </section>  
+    <script src="js/scripts.js"></script> <!-- Link to JavaScript file -->  
+    <script src="js/scripts2.js"></script> <!-- Link to JavaScript file -->
+</body>  
+
+</html>  

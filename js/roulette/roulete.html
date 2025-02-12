@@ -1,0 +1,40 @@
+<!DOCTYPE html>  
+<html lang="en">  
+
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Interactive English Learning Games</title>  
+    <link rel="stylesheet" href="/style/styles.css"> <!-- Link to your CSS file -->  
+</head>  
+
+<body>  
+
+    <header>  
+        <h1>Interactive Games for Learning English</h1>  
+    </header>  
+       
+    <section class="roulette">
+        <!-- Roulette Game Section -->  
+        <h1>Roulette Game</h1>  
+    <button id="sound-toggle">Desactivar Sonido</button>  
+    <div class="game-container">  
+        <div id="roulette-container">  
+            <canvas id="canvas" width="500" height="500"></canvas>  
+            <button id="spin">Girar</button>  
+        </div>  
+        <div id="question-container">  
+            <div id="score">Score: <span id="score-value">0</span></div>  
+            <div id="question">Pregunta</div>  
+            <div id="options"></div>  
+            <button id="submit">Enviar Respuesta</button>  
+            <div id="feedback"></div>  
+            <div id="celebration"></div> <!-- Container for GIFs -->  
+        </div>  
+    </div>  
+      </section>    
+
+    <script src="/js/roulette.js"></script> <!-- Link to JavaScript file -->
+</body>  
+
+</html>  
