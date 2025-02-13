@@ -159,4 +159,94 @@ label {
 #sound-toggle img {  
     max-width: 80%; /* Ensures the button's image fits within its bounds */  
     height: auto; /* Maintains the image's aspect ratio */  
+} 
+
+@media (max-width: 1200px) {  
+    /* Ajustes generales para pantallas medianas */  
+    
+    body {  
+        padding: 15px; /* Asegura un espacio cómodo en pantalla más pequeñas */  
+    }  
+
+    .container {  
+        width: 90%; /* Ajusta el contenedor para que no sea demasiado ancho */  
+    }  
+
+    header h1 {  
+        font-size: 30px; /* Ajustar tamaño de la fuente */  
+    }  
+
+    h1 {  
+        font-size: 2.2em; /* Tamaño de fuente menos grande */  
+    }  
+
+    .game-container {  
+        display: flex;   
+        flex-direction: row; /* Mantener la dirección horizontal en pantallas medianas */  
+        justify-content: space-around; /* Mantener un espaciado equilibrado */  
+        flex-wrap: wrap; /* Permite que los elementos se ajusten a nuevas líneas si es necesario */  
+    }  
+
+    #roulette-container, #question-container {  
+        width: 45%; /* Mantener contenedores más estrechos */  
+        margin: 5px; /* Añadir margen entre elementos */  
+    }  
+
+    #spin, #submit {  
+        width: auto; /* Ajustar ancho a auto, según el contenido */  
+        padding: 10px 20px; /* Ajustar el padding según sea necesario */  
+    }  
+}  
+
+@media (max-width: 768px) {  
+    /* Ajustes para tabletas y dispositivos más pequeños */  
+    
+    header h1 {  
+        font-size: 24px; /* Tamaño de fuente más pequeño */  
+    }  
+
+    .game-container {  
+        flex-direction: row; /* Mantener la dirección horizontal */  
+    }  
+
+    #roulette-container, #question-container {  
+        width: 100%; /* Contenedores ocupan todo el ancho en pantalla pequeña */  
+        margin: 10px 0; /* Mantener margen vertical entre los elementos */  
+    }  
+
+    #spin, #submit {  
+        width: 100%; /* Botones se ajustan al ancho completo */  
+        margin-top: 10px; /* Separación entre botones */  
+    }  
+}  
+
+@media (max-width: 480px) {  
+    /* Ajustes para móviles muy pequeños */  
+
+    header h1 {  
+        font-size: 20px; /* Reducir el tamaño de fuente del encabezado */  
+    }  
+
+    body {  
+        padding: 10px; /* Reducir padding para escuchar mejor la interacción */  
+    }  
+
+    .game-container {  
+        align-items: center; /* Centrar elementos horizontalmente */  
+        flex-direction: column; /* Poner elementos en columna en pantallas muy pequeñas */  
+    }  
+
+    #roulette-container, #question-container {  
+        width: 90%; /* Mantener un poco de espacio lateral */  
+    }  
+
+    #spin, #submit {  
+        width: 90%; /* Botones no ocupan el 100% del ancho */  
+        margin: 5px 0; /* Espacio vertical entre botones */  
+    }  
+
+    #celebration img {  
+        max-width: 80%; /* Limitar el tamaño de la imagen */  
+        height: auto; /* Mantener la proporción */  
+    }  
 }  
