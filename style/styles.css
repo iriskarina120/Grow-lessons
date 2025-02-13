@@ -1,224 +1,162 @@
 /* General styles */  
 body {  
-    font-family: Arial, sans-serif;  
-    background-color: #f4f4f4;  
+    font-family: 'Montserrat', sans-serif; /* Use Montserrat for a modern look */  
+    
+    max-width: 1200px; /* Cambia 1200px por el ancho deseado */  
+    margin: 0 auto; /*  
     margin: 0;  
-    padding: 20px;  
+    padding: 20px;    
+    display: flex; /* Allow flexbox layout */  
+    flex-direction: column; /* Align items in a column */  
+    align-items: center; /* Center items horizontally */  
+}  
+
+.container { /* New wrapper for content */ 
+    background-color: #001427; /* Navy Blue for the body background */  
+    width: 80%; /* Container takes 80% of the screen width */  
+    max-width: 1200px; /* Optional max-width to prevent it from becoming too wide */  
+    margin: 0 auto; /* Center the container */  
 }  
 
 /* Header styles */  
 header {  
-    background-color: #FF33C2;  
-    opacity: 0.8; /* Header background color */  
-    padding: 20px; /* Padding for header */  
-    text-align: center; /* Centered text */  
+    background-color: #BF0603; /* Red for the header background */  
+    opacity: 0.9; /* Slight opacity for a modern effect */  
+    padding: 20px; /* Padding for the header */  
+    text-align: center; /* Centered text in the header */  
 }  
 
 header h1 {  
-    margin: 0; /* No margin for header title */  
+    margin: 0; /* Remove margin for the header title */  
     font-size: 36px; /* Size of the header title */  
-    color: #F7F8FA;  
+    color: #F4D58D; /* Light Yellow for the header text color */  
 }  
 
-/* Navigation styles */  
-nav {  
-    margin: 20px 0; /* Margin for navigation links */  
-}  
-
-nav a {  
-    margin: 0 15px; /* Margin between links */  
-    text-decoration: none; /* No underline */  
-    color: #333; /* Dark text color for links */  
-    font-weight: 700; /* Bold text for links */  
-}  
-
-/* Section styles */  
-.section {  
-    padding: 20px; /* Padding for sections */  
-    text-align: center; /* Centered text */  
-    background-color: white; /* Background color for sections */  
-    border-radius: 8px; /* Rounded corners */  
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */  
-    margin-bottom: 20px; /* Space between sections */  
-}  
-
-/* Flashcard styles */  
-.flashcards {  
-    display: flex; /* Flexbox layout for flashcards */  
-    justify-content: center; /* Center flashcards */  
-    flex-wrap: wrap; /* Wrap to next line if needed */  
-}  
-
-.card {  
-    background-color: #FF33C2; /* Flashcard background color */  
-    border-radius: 10px; /* Rounded corners */  
-    padding: 15px; /* Padding inside flashcards */  
-    margin: 10px; /* Margin around flashcards */  
-    width: 150px; /* Fixed width for flashcards */  
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */  
-    text-align: center; /* Center text in flashcards */  
-}  
-
-/* Input and button styles */  
-input[type="text"] {  
-    padding: 10px; /* Padding for input field */  
-    border: 1px solid #ccc; /* Border for input */  
-    border-radius: 5px; /* Rounded corners */  
-    margin: 10px 0; /* Margin around input field */  
-}  
-
-button {  
-    margin: 5px; /* Margin between buttons */  
-    padding: 10px; /* Padding for buttons */  
-    background-color: #02B3F6; /* Button background color */  
-    color: white; /* Button text color */  
-    border: none; /* No border */  
-    border-radius: 5px; /* Rounded corners */  
-    cursor: pointer; /* Pointer cursor on hover */  
-    font-size: 16px; /* Font size for button */  
-}  
-
-button:hover {  
-    background-color: #028dc1; /* Darker shade on hover */  
-}  
-
-/* Feedback styles */  
-p {  
-    font-size: 16px; /* Font size for feedback text */  
-    color: #333; /* Color for feedback text */  
-}  
-/* Existing styles... */  
-
-/* Ruleta styles */  
+/* Roulette styles */  
 h1 {  
-            font-family: 'Montserrat', sans-serif;  
-            font-size: 3em;  
-            color: #333;  
-            text-align: center;  
-            margin-bottom: 20px;  
-        }  
-        .game-container {  
-            display: flex;  
-            justify-content: space-around;  
-            width: 80%;  
-            margin-top: 20px;  
-        }  
-        #roulette-container {  
-            display: flex;  
-            flex-direction: column;  
-            align-items: center;  
-            width: 500px;  
-            position: relative;  
-        }  
-        #question-container {  
-            width: 40%;  
-            padding: 20px;  
-            background-color: #fff;  
-            border-radius: 10px;  
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);  
-        }  
-        canvas {  
-            position: relative;  
-            left: 0;  
-            top: 0;  
-        }  
-        #spin {  
-            background-color: #4CAF50;  
-            color: white;  
-            padding: 15px 30px;  
-            border: none;  
-            border-radius: 5px;  
-            cursor: pointer;  
-            font-size: 18px;  
-            margin-top: 20px; /* Added margin to separate from canvas */  
-            z-index: 10;  
-        }  
-        #spin:hover {  
-            background-color: #367C39;  
-        }  
-        #options {  
-            margin-top: 20px;  
-        }  
-        label {  
-            display: block;  
-            margin-bottom: 10px;  
-        }  
-        #submit {  
-            background-color: #007BFF;  
-            color: white;  
-            padding: 10px 20px;  
-            border: none;  
-            border-radius: 5px;  
-            cursor: pointer;  
-            font-size: 16px;  
-        }  
-        #submit:hover {  
-            background-color: #0056b3;  
-        }  
-        #feedback {  
-            margin-top: 20px;  
-            font-weight: bold;  
-        }  
-        #celebration {  
-            margin-top: 20px;  
-        }  
-        #celebration img {  
-            max-width: 70%;  
-            height: auto;            
-        }  
-        #score {  
-            margin-top: 20px;  
-            font-size: 18px;  
-        }  
-        #sound-toggle {  
-            margin-top: 10px;  
-            padding: 10px 15px;  
-            background-color: #555;  
-            color: white;  
-            border: none;  
-            border-radius: 5px;  
-            cursor: pointer;  
-        }  
-        #sound-toggle:hover {  
-            background-color: #333;  
-        }  
-
-/* Memory game styles */  
-.memory-board {  
-    display: grid; /* Use grid layout */  
-    grid-template-columns: repeat(4, 1fr); /* 4 columns */  
-    gap: 10px; /* Space between cards */  
-    justify-items: center; /* Center the cards */  
+    font-family: 'Montserrat', sans-serif;  
+    font-size: 2.5em; /* Adjusted size for better visual fit */  
+    color: #001427; /* White for the main title in the game */  
+    text-align: center;  
+    margin-bottom: 20px; /* Increased margin for more space below */  
+    margin-top: 20px; /* Increased margin for more space above */  
 }  
 
-.memory-card {  
-    width: 100px; /* Width of memory cards */  
-    height: 100px; /* Height of memory cards */  
-    background-color: #FF33C2; /* Card background color */  
-    border-radius: 10px; /* Rounded corners */  
-    display: flex; /* Flexbox for centering */  
-    align-items: center; /* Center items vertically */  
-    justify-content: center; /* Center items horizontally */  
-    color: white; /* Text color */  
-    font-size: 24px; /* Text size */  
-    cursor: pointer; /* Pointer cursor */  
+.game-container {
+    padding: 10px;  
+    display: flex;  
+    justify-content: space-around;  
+    width: 100%; /* Full width for the container */  
+    margin-top: 20px;  
+  
 }  
 
-/* Matching game styles */  
-.matching-board {  
-    display: grid; /* Use grid layout */  
-    grid-template-columns: repeat(4, 1fr); /* 4 columns */  
-    gap: 10px; /* Space between cards */  
-    justify-items: center; /* Center the cards */  
+#roulette-container { 
+    background-color: #001427; /* Navy Blue for the body background */  
+    display: flex;  
+    flex-direction: column;  
+    align-items: center;  
+    width: 100%;  
+    position: relative;
+    border-radius: 10px;  
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);  
 }  
 
-.matching-card {  
-    width: 100px; /* Width of matching cards */  
-    height: 100px; /* Height of matching cards */  
-    background-color: #02B3F6; /* Card background color */  
-    border-radius: 10px; /* Rounded corners */  
-    display: flex; /* Flexbox */  
-    align-items: center; /* Center items vertically */  
-    justify-content: center; /* Center items horizontally */  
-    cursor: pointer; /* Pointer cursor */  
+#question-container { 
+    background-color: #001427; /* Navy Blue for the body background */  
+    width: 100%; /* Full width of container */  
+    padding: 2%;  
+    background-color: #F4D58D; /* Light Yellow for the question container */  
+    font-size: large;     
+    border-radius: 10px;  
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);  
+}  
+
+canvas {  
+    position: relative;  
+    left: 100;  
+    top: 0;  
+}  
+
+#spin {  
+    background-color: #BF0603; /* Red for the spin button */  
+    color: white;  
+    padding: 15px 30px;  
+    border: none;  
+    border-radius: 5px;  
+    cursor: pointer;  
+    font-size: 18px;  
+    margin-top: 20px; /* Margin to separate from the canvas */  
+    z-index: 10;  
+}  
+
+#spin:hover {  
+    background-color: #8D0801; /* Darker shade for hover effect */  
+}  
+
+#options {  
+    margin-top: 20px;  
+}  
+
+label {  
+    display: block;  
+    margin-bottom: 10px;  
+    color: #001427; /* Navy Blue for the option labels */  
+}  
+
+#submit {  
+    background-color: #BF0603; /* Red for the submit button */  
+    color: white;  
+    padding: 10px 20px;  
+    border: none;  
+    border-radius: 5px;  
+    cursor: pointer;  
+    font-size: 16px;  
+}  
+
+#submit:hover {  
+    background-color: #8D0801; /* Darker shade on hover for submit button */  
+}  
+
+#feedback {   
+    margin-top: 20px;  
+    font-weight: bold;  
+    font-size: x-large;  
+    color: #001427; /* Navy Blue for feedback text */  
+}  
+
+#celebration img {  
+    height: 50%;  
+    position: absolute;   
+    margin-top: 10px;  
+}  
+
+#score {  
+    margin-top: 20px;  
+    font-size: xx-large;  
+    font-weight: bold;  
+    color: #001427; /* Navy Blue for the score text */  
+}  
+
+#sound-toggle {  
+    display: inline-flex; /* Change display to inline-flex */  
+    align-items: center; /* Center the content vertically */  
+    justify-content: center; /* Center the content horizontally */  
+    position: absolute;  
+    top: 5px;  
+    left: 10px;  
+    padding: 5px 10px;  
+    background-color: #001427;  
+    color: white;  
+    border: none;  
+    border-radius: 5px;  
+    cursor: pointer;  
+    max-width: 100px;  
+    font-size: 12px;  
+    box-sizing: border-box; /* Ensures padding and border are included in total size */  
+}  
+
+#sound-toggle img {  
+    max-width: 80%; /* Ensures the button's image fits within its bounds */  
+    height: auto; /* Maintains the image's aspect ratio */  
 }  

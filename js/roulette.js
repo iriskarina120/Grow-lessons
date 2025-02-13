@@ -11,13 +11,14 @@ class RouletteGame {
         this.ctx = null;  
         this.score = 0;  
         this.soundEnabled = true; // Estado del sonido  
-
-        // Sonidos  
+        this.lastAnswer = null; // Variable para rastrear la última respuesta    
+        this.usedQuestions = []; // Array para rastrear preguntas ya usadas  
+        this.maxQuestions = 5; // Máximo de preguntas  
         this.spinSound = new Audio('/sounds/wheel-spin.wav');  
         this.backgroundMusic = new Audio('/sounds/background-loop.wav');  
         this.correctSound = new Audio('/sounds/correct.wav');  
         this.incorrectSound = new Audio('/sounds/incorrect.wav');  
-        this.backgroundMusic.loop = true; // Background music 
+        this.backgroundMusic.loop = true; // Background music   
 
         this.initialize();  
     }  
@@ -28,6 +29,16 @@ class RouletteGame {
         document.getElementById("sound-toggle").addEventListener("click", () => this.toggleSound());  
         this.drawRouletteWheel();  
         this.startBackgroundMusic();  
+    }  
+
+    hideQuestionAndOptions() {  
+        const questionContainer = document.getElementById("question-container");  
+        questionContainer.style.display = 'none';  
+    }  
+
+    showQuestionAndOptions() {  
+        const questionContainer = document.getElementById("question-container");  
+        questionContainer.style.display = 'block';   
     }  
 
     startBackgroundMusic() {  
@@ -42,10 +53,10 @@ class RouletteGame {
     toggleSound() {  
         this.soundEnabled = !this.soundEnabled;  
         if (this.soundEnabled) {  
-            document.getElementById("sound-toggle").innerText = "Desactivar Sonido";  
+            document.getElementById("sound-toggle").innerHTML = '<img src="https://cdn.pixabay.com/photo/2014/04/03/10/00/loudspeaker-309554_1280.png" /> X ';  
             this.startBackgroundMusic();  
         } else {  
-            document.getElementById("sound-toggle").innerText = "Activar Sonido";  
+            document.getElementById("sound-toggle").innerHTML = '<img src="https://cdn.pixabay.com/photo/2014/04/03/10/00/loudspeaker-309554_1280.png" /> ON';  
             this.stopBackgroundMusic();  
         }  
     }  
@@ -89,119 +100,157 @@ class RouletteGame {
                 this.ctx.restore();  
             }  
 
-            // Draw the arrow  
-            this.ctx.fillStyle = "black";  
-            this.ctx.beginPath();  
-            this.ctx.moveTo(250 - 4, 250 - (outsideRadius + 5));  
-            this.ctx.lineTo(250 + 4, 250 - (outsideRadius + 5));  
-            this.ctx.lineTo(250 + 4, 250 - (outsideRadius - 5));  
-            this.ctx.lineTo(250 + 9, 250 - (outsideRadius - 5));  
-            this.ctx.lineTo(250 + 0, 250 - (outsideRadius - 13));  
-            this.ctx.lineTo(250 - 9, 250 - (outsideRadius - 5));  
-            this.ctx.lineTo(250 - 4, 250 - (outsideRadius - 5));  
-            this.ctx.lineTo(250 - 4, 250 - (outsideRadius + 5));  
-            this.ctx.fill();  
+              // Dibujar la flecha    
+              this.ctx.fillStyle = "black";  
+              this.ctx.beginPath();  
+              this.ctx.moveTo(250 - 4, 250 - (outsideRadius + 5));  
+              this.ctx.lineTo(250 + 4, 250 - (outsideRadius + 5));  
+              this.ctx.lineTo(250 + 4, 250 - (outsideRadius - 5));  
+              this.ctx.lineTo(250 + 9, 250 - (outsideRadius - 5));  
+              this.ctx.lineTo(250 + 0, 250 - (outsideRadius - 13));  
+              this.ctx.lineTo(250 - 9, 250 - (outsideRadius - 5));  
+              this.ctx.lineTo(250 - 4, 250 - (outsideRadius - 5));  
+              this.ctx.lineTo(250 - 4, 250 - (outsideRadius + 5));  
+              this.ctx.fill();  
+          }  
+      }  
+  
+      spin() {  
+        if (this.usedQuestions.length >= this.maxQuestions) {  
+            document.getElementById("feedback").innerText = `Game over! Your score is ${this.score}/${this.maxQuestions}.`;  
+            return; // Detener el juego si se han respondido 5 preguntas   
         }  
-    }  
-
-    spin() {  
-        // Limpiar el GIF al girar la ruleta  
+        
+        // Limpiar el feedback previo antes de girar  
+        document.getElementById("feedback").innerText = "";   
         document.getElementById("celebration").innerHTML = "";  
         this.playSound(this.spinSound); // Reproduce el sonido al girar  
         this.spinAngleStart = Math.random() * 10 + 10;  
         this.spinTime = 0;  
         this.spinTimeTotal = Math.random() * 3 + 4 * 1000;  
+
+        // Ocultar preguntas y opciones antes de girar  
+        this.hideQuestionAndOptions();  
+
         this.rotateWheel();  
     }  
 
-    rotateWheel() {  
-        this.spinTime += 30;  
-        if (this.spinTime >= this.spinTimeTotal) {  
-            this.stopRotateWheel();  
-            return;  
-        }  
-        const spinAngle = this.spinAngleStart - this.easeOut(this.spinTime, 0, this.spinAngleStart, this.spinTimeTotal);  
-        this.startAngle += (spinAngle * Math.PI / 180);  
-        this.drawRouletteWheel();  
-        this.spinTimeout = setTimeout(() => this.rotateWheel(), 30);  
+    endGame() {  
+        // Mostrar mensaje de finalización del juego y puntaje final  
+        const feedbackDiv = document.getElementById("feedback");  
+        feedbackDiv.innerText = `Game over! Your score is ${this.score}/${this.maxQuestions}.`;  
+        document.getElementById("options").innerHTML = ""; // Limpiar las opciones  
+        document.getElementById("question").innerText = ""; // Limpiar la pregunta  
+        this.hideQuestionAndOptions(); // Asegurarse de ocultar las opciones  
     }  
-
-    stopRotateWheel() {  
-        clearTimeout(this.spinTimeout);  
-        const degrees = this.startAngle * 180 / Math.PI + 90;  
-        const arcd = this.arc * 180 / Math.PI;  
-        const index = Math.floor((360 - degrees % 360) / arcd);  
-        
-        this.ctx.save();  
-        this.ctx.font = 'bold 30px Helvetica, Arial';  
-        document.getElementById("question").innerText = this.questions[index].question;  
-        
-        // Populate answer options  
-        this.populateOptions(index);  
-        this.ctx.fillText(this.options[index], 250 - this.ctx.measureText(this.options[index]).width / 2, 250 + 10);  
-        this.ctx.restore();  
-    }  
-
-    populateOptions(index) {  
-        const optionsDiv = document.getElementById("options");  
-        optionsDiv.innerHTML = ""; // Clear previous options  
-        this.questions[index].options.forEach(option => {  
-            const label = document.createElement("label");  
-            label.innerHTML = `<input type="radio" name="answer" value="${option}"> ${option}<br>`;  
-            optionsDiv.appendChild(label);  
-        });  
-    }  
-
-    checkAnswer() {  
-        const selectedOption = document.querySelector('input[name="answer"]:checked');  
-        const celebrationDiv = document.getElementById("celebration");  
-        celebrationDiv.innerHTML = ""; // Clear previous GIFs  
-
-        if (!selectedOption) {  
-            document.getElementById("feedback").innerText = "Please select an answer.";  
-            return;  
-        }  
-        
-        const userAnswer = selectedOption.value;   
-        const currentQuestionIndex = this.questions.findIndex(q => q.question === document.getElementById("question").innerText);  
-        
-        if (userAnswer === this.questions[currentQuestionIndex].answer) {  
-            this.score++;  
-            document.getElementById("score-value").innerText = this.score;  
-            document.getElementById("feedback").innerText = "Correct! 🎉";  
-            this.playSound(this.correctSound); // Reproduce el sonido correcto  
-
-            // Display correct answer GIF  
-            const img = document.createElement("img");  
-            img.src = "https://media.giphy.com/media/vLJlaDZYCNOaBVWimP/giphy.gif?cid=790b7611mkfo7kd8rm7k8h7gjva0rvvu29ss6qk135hdul3n&ep=v1_gifs_search&rid=giphy.gif&ct=g"; // Replace with your GIF URL  
-            img.alt = "Correct Answer";  
-            img.style.width = '90%';  // Ajusta el tamaño aquí  
-            img.style.height = 'auto';  
-            celebrationDiv.appendChild(img);  
-        } else {  
-            document.getElementById("feedback").innerText = "Incorrect. Try again! 😥";  
-            this.playSound(this.incorrectSound); // Reproduce el sonido incorrecto  
-
-            // Display incorrect answer GIF  
-            const img = document.createElement("img");  
-            img.src = "https://media.giphy.com/media/CoND5j6Bn1QZUgm1xX/giphy.gif?cid=790b7611tm1234vn5y8eses1bgxfgybp4171o3o1ppvczgmp&ep=v1_gifs_search&rid=giphy.gif&ct=g"; // Replace with your GIF URL  
-            img.alt = "Incorrect Answer";  
-            img.style.width = '90%';  // Ajusta el tamaño aquí  
-            img.style.height = 'auto';  
-            celebrationDiv.appendChild(img);  
-        }  
-    }  
-
-    getColor(index, total) {  
-        const hue = index * 360 / total;  
-        return 'hsl(' + hue + ', 100%, 80%)';  
-    }  
-
-    easeOut(t, b, c, d) {  
-        t = t / d - 1;  
-        return c * (t*t*t + 1) + b;  
-    }  
-}  
+  
+      rotateWheel() {  
+          this.spinTime += 30;  
+          if (this.spinTime >= this.spinTimeTotal) {  
+              this.stopRotateWheel();  
+              return;  
+          }  
+          const spinAngle = this.spinAngleStart - this.easeOut(this.spinTime, 0, this.spinAngleStart, this.spinTimeTotal);  
+          this.startAngle += (spinAngle * Math.PI / 180);  
+          this.drawRouletteWheel();  
+          this.spinTimeout = setTimeout(() => this.rotateWheel(), 30);  
+      }  
+  
+      stopRotateWheel() {  
+          clearTimeout(this.spinTimeout);  
+          const degrees = this.startAngle * 180 / Math.PI + 90;  
+          const arcd = this.arc * 180 / Math.PI;  
+          const index = Math.floor((360 - degrees % 360) / arcd);  
+  
+          // Asegurarse de que la pregunta no se repita  
+          if (this.usedQuestions.includes(index)) {  
+              this.stopRotateWheel(); // Si se repite, volver a girar  
+              this.spin();  
+              return;  
+          }  
+          this.usedQuestions.push(index);  
+  
+          this.ctx.save();  
+          this.ctx.fillStyle = '#F4D58D';  
+          this.ctx.font = 'bold 30px Helvetica, Arial';  
+          document.getElementById("question").innerText = this.questions[index].question;  
+          
+          // Poblamos las opciones de respuesta  
+          this.populateOptions(index);  
+          this.ctx.fillText(this.options[index], 250 - this.ctx.measureText(this.options[index]).width / 2, 250 + 10);  
+          this.ctx.restore();  
+  
+          // Mostrar preguntas y opciones después de detener la ruleta  
+          this.showQuestionAndOptions();  
+      }  
+  
+      populateOptions(index) {  
+          const optionsDiv = document.getElementById("options");  
+          optionsDiv.innerHTML = ""; // Limpiar opciones anteriores  
+          this.questions[index].options.forEach(option => {  
+              const label = document.createElement("label");  
+              label.innerHTML = `<input type="radio" name="answer" value="${option}"> ${option}<br>`;  
+              optionsDiv.appendChild(label);  
+          });  
+      }  
+  
+      checkAnswer() {  
+          const selectedOption = document.querySelector('input[name="answer"]:checked');  
+          const celebrationDiv = document.getElementById("celebration");  
+          celebrationDiv.innerHTML = ""; // Limpiar GIFs anteriores  
+      
+          if (!selectedOption) {  
+              document.getElementById("feedback").innerText = "Please select an answer.";  
+              return;  
+          }  
+      
+          const userAnswer = selectedOption.value;   
+          const currentQuestionIndex = this.questions.findIndex(q => q.question === document.getElementById("question").innerText);  
+      
+          // Deshabilitar opciones después de enviar la respuesta  
+          const options = document.querySelectorAll('input[name="answer"]');  
+          options.forEach(option => {  
+              option.disabled = true; // Deshabilitar todas las opciones  
+          });  
+      
+          if (userAnswer === this.questions[currentQuestionIndex].answer) {  
+              this.score++;  
+              document.getElementById("score-value").innerText = this.score;  
+              document.getElementById("feedback").innerText = "Correct! 🎉";  
+              this.playSound(this.correctSound); // Reproduce el sonido correcto  
+      
+              // Mostrar GIF de respuesta correcta  
+              const img = document.createElement("img");  
+              img.src = "https://media.giphy.com/media/2Wi9XZ7d7l8wJzGVt9/giphy.gif?cid=ecf05e47m8395oj19l0zkc7dso8oymjlq3xn9ld9tfneoolo&ep=v1_stickers_search&rid=giphy.gif&ct=s";  
+              img.alt = "Correct Answer";  
+              img.style.width = '15%';  
+              img.style.height = 'auto';  
+              celebrationDiv.appendChild(img);  
+              
+          } else {  
+              document.getElementById("feedback").innerText = "Incorrect. Try again! 😥";  
+              this.playSound(this.incorrectSound); // Reproduce el sonido incorrecto  
+      
+              // Mostrar GIF de respuesta incorrecta  
+              const img = document.createElement("img");  
+              img.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnJqZHN5dTdncGs2eTFqaWM0Z2Rxem0xZWo5a3hvODE5eGwxaHQ0NyZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/wMlcT3exSxYAcbkby6/giphy.gif";  
+              img.alt = "Incorrect Answer";  
+              img.style.width = '15%';  
+              img.style.height = 'auto';  
+              celebrationDiv.appendChild(img);  
+          }  
+      }  
+      
+      getColor(index, total) {  
+          const hue = index * 360 / total;  
+          return 'hsl(' + hue + ', 100%, 80%)';  
+      }  
+  
+      easeOut(t, b, c, d) {  
+          t = t / d - 1;  
+          return c * (t*t*t + 1) + b;  
+      }  
+  }   
 
 // Initialize the game  
 document.addEventListener("DOMContentLoaded", function() {  
