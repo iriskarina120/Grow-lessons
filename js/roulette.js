@@ -13,7 +13,7 @@ class RouletteGame {
         this.soundEnabled = true; // Estado del sonido  
         this.lastAnswer = null; // Variable para rastrear la última respuesta    
         this.usedQuestions = []; // Array para rastrear preguntas ya usadas  
-        this.maxQuestions = 5; // Máximo de preguntas  
+        this.maxQuestions = 3; // Máximo de preguntas  
         this.spinSound = new Audio('/sounds/wheel-spin.wav');  
         this.backgroundMusic = new Audio('/sounds/background-loop.wav');  
         this.correctSound = new Audio('/sounds/correct.wav');  
@@ -26,9 +26,24 @@ class RouletteGame {
     initialize() {  
         document.getElementById("spin").addEventListener("click", () => this.spin());  
         document.getElementById("submit").addEventListener("click", () => this.checkAnswer());  
-        document.getElementById("sound-toggle").addEventListener("click", () => this.toggleSound());  
+        document.getElementById("sound-toggle").addEventListener("click", () => this.toggleSound()); 
+        document.getElementById("restart").addEventListener("click", () => this.restartGame()); // Agregar esta línea   
         this.drawRouletteWheel();  
         this.startBackgroundMusic();  
+    }
+    restartGame() {  
+        this.score = 0; // Reiniciar el puntaje  
+        this.usedQuestions = []; // Limpiar las preguntas usadas  
+        document.getElementById("score-value").innerText = this.score; // Actualizar el puntaje en la interfaz  
+        document.getElementById("feedback").innerText = ""; // Limpiar cualquier mensaje de feedback  
+        this.startAngle = 0; // Reiniciar el ángulo de la rueda si es necesario  
+        this.drawRouletteWheel(); // Redibujar la rueda  
+    
+        this.showQuestionAndOptions(); // Asegurarse de mostrar el contenedor de preguntas  
+    
+        // Ocultar botón de reiniciar y mostrar botón de girar  
+        document.getElementById("restart").style.display = "none"; // Ocultar botón de reiniciar  
+        document.getElementById("spin").style.display = "block"; // Mostrar botón de girar  
     }  
 
     hideQuestionAndOptions() {  
@@ -140,10 +155,14 @@ class RouletteGame {
         const feedbackDiv = document.getElementById("feedback");  
         feedbackDiv.innerText = `Game over! Your score is ${this.score}/${this.maxQuestions}.`;  
         document.getElementById("options").innerHTML = ""; // Limpiar las opciones  
-        document.getElementById("question").innerText = ""; // Limpiar la pregunta  
-        this.hideQuestionAndOptions(); // Asegurarse de ocultar las opciones  
+        document.getElementById("question").innerText = ""; // Limpiar la pregunta 
+         
+        
+        
+        // Ocultar botón de girar y mostrar botón de reiniciar  
+        document.getElementById("spin").style.display = "none"; // Ocultar botón de girar  
+        document.getElementById("restart").style.display = "block"; // Mostrar botón de reiniciar  
     }  
-  
       rotateWheel() {  
           this.spinTime += 30;  
           if (this.spinTime >= this.spinTimeTotal) {  
@@ -157,32 +176,50 @@ class RouletteGame {
       }  
   
       stopRotateWheel() {  
-          clearTimeout(this.spinTimeout);  
-          const degrees = this.startAngle * 180 / Math.PI + 90;  
-          const arcd = this.arc * 180 / Math.PI;  
-          const index = Math.floor((360 - degrees % 360) / arcd);  
-  
-          // Asegurarse de que la pregunta no se repita  
-          if (this.usedQuestions.includes(index)) {  
-              this.stopRotateWheel(); // Si se repite, volver a girar  
-              this.spin();  
-              return;  
-          }  
-          this.usedQuestions.push(index);  
-  
-          this.ctx.save();  
-          this.ctx.fillStyle = '#F4D58D';  
-          this.ctx.font = 'bold 30px Helvetica, Arial';  
-          document.getElementById("question").innerText = this.questions[index].question;  
-          
-          // Poblamos las opciones de respuesta  
-          this.populateOptions(index);  
-          this.ctx.fillText(this.options[index], 250 - this.ctx.measureText(this.options[index]).width / 2, 250 + 10);  
-          this.ctx.restore();  
-  
-          // Mostrar preguntas y opciones después de detener la ruleta  
-          this.showQuestionAndOptions();  
-      }  
+        clearTimeout(this.spinTimeout);  
+        const degrees = this.startAngle * 180 / Math.PI + 90;  
+        const arcd = this.arc * 180 / Math.PI;  
+        const index = Math.floor((360 - degrees % 360) / arcd);  
+    
+        // Asegurarse de que la pregunta no se repita  
+        if (this.usedQuestions.includes(index)) {  
+            this.stopRotateWheel(); // Si se repite, volver a girar  
+            this.spin();  
+            return;  
+        }  
+        
+        // Aquí podemos obtener la categoría desde las opciones  
+        const selectedCategory = this.options[index]; // Se usa el índice para obtener la categoría correspondiente  
+        const filteredQuestions = this.questions.filter(q => q.category.includes(selectedCategory)); // Filtrar preguntas por categoría  
+    
+        // Si no hay preguntas en esa categoría, volver a girar  
+        if (filteredQuestions.length === 0) {  
+            this.stopRotateWheel();  
+            return;  
+        }  
+    
+        // Elegir una pregunta aleatoria de las preguntas filtradas  
+        const randomQuestion = filteredQuestions[Math.floor(Math.random() * filteredQuestions.length)];  
+        this.usedQuestions.push(index);  
+    
+        this.ctx.save();  
+        this.ctx.fillStyle = '#F4D58D';  
+        this.ctx.font = 'bold 30px Helvetica, Arial';  
+        document.getElementById("question").innerText = randomQuestion.question;  
+    
+        // Poblamos las opciones de respuesta  
+        this.populateOptions(this.questions.indexOf(randomQuestion)); // Busca el índice de la pregunta seleccionada  
+        this.ctx.fillText(this.options[index], 250 - this.ctx.measureText(this.options[index]).width / 2, 250 + 10);  
+        this.ctx.restore();  
+    
+        // Mostrar preguntas y opciones después de detener la ruleta  
+        this.showQuestionAndOptions();  
+
+        // Aquí es donde debes llamar a endGame si se han respondido todas las preguntas  
+        if (this.usedQuestions.length >= this.maxQuestions) {  
+        this.endGame(); // Añadir esta línea para llamar a endGame  
+    } 
+    }  
   
       populateOptions(index) {  
           const optionsDiv = document.getElementById("options");  
@@ -258,32 +295,38 @@ document.addEventListener("DOMContentLoaded", function() {
         {  
             question: "What is a synonym for 'happy'?",  
             options: ["Sad", "Joyful", "Angry", "Tired"],  
-            answer: "Joyful"  
+            answer: "Joyful",  
+            category: ["Synonyms", "Vocabulary"] // Categoría asignada  
         },  
         {  
             question: "Which of these is a phrasal verb?",  
             options: ["Run", "Think", "Look up", "Eat"],  
-            answer: "Look up"  
+            answer: "Look up",  
+            category: ["Phrasal Verbs", "Vocabulary"] // Categoría asignada  
         },  
         {  
             question: "What part of speech is 'quickly'?",  
             options: ["Noun", "Verb", "Adjective", "Adverb"],  
-            answer: "Adverb"  
+            answer: "Adverb",  
+            category: ["Grammar", "Vocabulary"] // Categoría asignada  
         },  
         {  
             question: "Choose the correct tense: I _____ to the store yesterday.",  
             options: ["go", "went", "going", "gone"],  
-            answer: "went"  
+            answer: "went",  
+            category: ["Grammar", "Vocabulary"] // Categoría asignada  
         },  
         {  
             question: "What is an antonym for 'brave'?",  
             options: ["Courageous", "Fearful", "Bold", "Heroic"],  
-            answer: "Fearful"  
+            answer: "Fearful",  
+            category: ["Antonyms", "Vocabulary"] // Categoría asignada  
         },  
         {  
             question: "Which idiom means 'to be mistaken'?",  
             options: ["Barking up the wrong tree", "Break a leg", "Hit the nail on the head", "See eye to eye"],  
-            answer: "Barking up the wrong tree"  
+            answer: "Barking up the wrong tree",  
+            category: ["Idioms", "Vocabulary"] // Categoría asignada  
         }  
     ];  
 
